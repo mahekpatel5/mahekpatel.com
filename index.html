@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="ds/styles.css">
+<script src="ds/_ds_bundle.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/png" href="assets/favicon-m.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: var(--color-bg, #f3f2f2); --surface: var(--color-neutral-100, #eae9e9); --text: var(--color-text, #201e1d);
+    --muted: #1f1d1c; --divider: rgba(32,30,29,0.4); --icon-filter: grayscale(1) brightness(0) opacity(0.9);
+    --accent: var(--color-accent, #ec3013); --accent-strong: var(--color-accent-700, #ae1800); --on-accent: var(--color-bg, #f3f2f2);
+    --brand-bg: #1a1918; --brand-fg: #f3f2f2; --brand-border: #f3f2f2; --logo-strong: #000000;
+  }
+  body[data-theme="dark"] {
+    --bg: #1a1918; --surface: #2d2b2b; --text: #f3f2f2;
+    --muted: #f0eded; --divider: rgba(243,242,242,0.32); --icon-filter: grayscale(1) brightness(0) invert(1) opacity(0.95);
+    --accent: var(--color-accent-400, #ff563c); --accent-strong: var(--color-accent-300, #ff9783); --on-accent: #1a1918;
+    --brand-bg: var(--accent); --brand-fg: #1a1918; --brand-border: var(--accent); --logo-strong: #ffffff;
+  }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Space Grotesk", system-ui, sans-serif; font-size: 20px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 160ms linear, color 160ms linear;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-strong); }
+  h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700; line-height: 1.08; letter-spacing: -0.03em; }
+  * { box-sizing: border-box; }
+  ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+  :focus { outline: none; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; scroll-padding-top: 58px; }
+  body { overflow-x: hidden; }
+  @keyframes arrow-nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+  @keyframes caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes sig-reveal {
+    0%, 48% { clip-path: inset(0 0 100% 0); }
+    100% { clip-path: inset(0 0 -4% 0); }
+  }
+  @keyframes sig-block {
+    0% { height: 0%; }
+    48% { height: 104%; }
+    100% { height: 0%; }
+  }
+  #navtoggle, #navmenu { display: none; }
+  @media (max-width: 860px) {
+    html { scroll-snap-type: none !important; scroll-padding-top: 62px; }
+    body { font-size: 16px; }
+    #navlinks { display: none !important; }
+    #navtoggle { display: inline-flex !important; }
+    header > div { padding: 10px 16px !important; gap: 10px !important; }
+    header a[href="#top"]:nth-of-type(2) { font-size: 18px !important; margin-right: 0 !important; }
+    #themetoggle span:last-child { display: none !important; }
+    #themetoggle { padding: 10px !important; }
+    section { padding: 56px 18px 64px !important; min-height: 0 !important; align-items: stretch !important; }
+    #contact > div { padding: 56px 18px 64px !important; }
+    #contact [style*="grid-template-columns"] { grid-template-columns: 1fr !important; gap: 22px !important; }
+    #contact a[href^="mailto"] { font-size: 16px !important; word-break: break-word !important; }
+    #top h1 { font-size: clamp(30px, 10.2vw, 56px) !important; white-space: nowrap !important; }
+    #top > p { font-size: 15px !important; line-height: 1.4 !important; height: 2.9em !important; min-height: 0 !important; overflow: hidden !important; margin-bottom: 0 !important; }
+    #top > div:nth-of-type(2) { margin-top: 10px !important; }
+    #top [role="img"], #top span[style*="width: 44px"] { width: 30px !important; height: 30px !important; -webkit-mask-size: 26px !important; mask-size: 26px !important; }
+    #top img[src*="shopify"] { width: 24px !important; height: 24px !important; }
+    #top [role="img"][aria-label="University of Waterloo"] { -webkit-mask-size: 20px !important; mask-size: 20px !important; }
+    #experience [role="img"], #experience span[style*="width: 50px"] { width: 34px !important; height: 34px !important; -webkit-mask-size: 30px !important; mask-size: 30px !important; }
+    #experience img { width: 26px !important; height: 26px !important; }
+    #experience [role="img"][aria-label="Manulife"] { -webkit-mask-size: 24px !important; mask-size: 24px !important; }
+    [role="img"][aria-label="WAT.ai"] { width: 40px !important; height: 40px !important; }
+    #experience [style*="flex-wrap: wrap"] > span:last-child > span { white-space: nowrap !important; }
+    #experience [style*="padding-left: 62px"] { padding-left: 46px !important; font-size: 11px !important; letter-spacing: 0.06em !important; }
+    #experience [style*="flex-wrap: wrap"] { flex-wrap: nowrap !important; align-items: flex-start !important; gap: 10px !important; }
+    #experience [style*="flex-wrap: wrap"] > span:last-child { font-size: 17px !important; line-height: 1.3 !important; padding-top: 5px !important; }
+    #top > div:first-of-type { gap: 10px !important; }
+    #education > div:last-child { grid-template-columns: 1fr !important; gap: 22px !important; justify-items: start !important; }
+    [data-shape] { display: none !important; }
+    #education img:not([data-shape]), #education [role="img"][aria-label="University of Waterloo"] { width: 96px !important; height: 96px !important; }
+    #extras > div:last-child { grid-template-columns: 1fr !important; margin-left: 0 !important; }
+    #extras > div:first-of-type { margin-bottom: 16px !important; }
+    [style*="padding-left:34px"], [style*="padding-left: 34px"] { padding-left: 0 !important; }
+    [style*="padding-left:62px"], [style*="padding-left: 62px"] { padding-left: 58px !important; }
+    [style*="padding-left:26px"], [style*="padding-left: 26px"] { padding-left: 0 !important; }
+    [style*="max-width:60ch"], [style*="max-width: 60ch"] { max-width: 100% !important; }
+    [style*="font-size:30px"], [style*="font-size: 30px"] { font-size: 20px !important; }
+    [style*="font-size:26px"], [style*="font-size: 26px"] { font-size: 20px !important; }
+    [style*="font-size:25px"], [style*="font-size: 25px"] { font-size: 19px !important; }
+    [style*="font-size:24px"], [style*="font-size: 24px"] { font-size: 17px !important; }
+    [style*="font-size:23px"], [style*="font-size: 23px"] { font-size: 18px !important; }
+    [style*="font-size:21px"], [style*="font-size: 21px"] { font-size: 16px !important; }
+    [style*="font-size:20px"], [style*="font-size: 20px"] { font-size: 16px !important; }
+    [style*="font-size:19px"], [style*="font-size: 19px"] { font-size: 15px !important; }
+    [style*="font-size:18px"], [style*="font-size: 18px"] { font-size: 14px !important; }
+    [style*="font-size:17px"], [style*="font-size: 17px"] { font-size: 14px !important; }
+    [style*="font-size:16px"], [style*="font-size: 16px"] { font-size: 13px !important; }
+    [style*="font-size:15px"], [style*="font-size: 15px"] { font-size: 12px !important; }
+    [style*="width:58px"][style*="height:58px"], [style*="width: 58px"][style*="height: 58px"] { width: 46px !important; height: 46px !important; }
+    [style*="width:44px"][style*="height:44px"], [style*="width: 44px"][style*="height: 44px"] { width: 34px !important; height: 34px !important; }
+    [style*="width:50px"][style*="height:50px"], [style*="width: 50px"][style*="height: 50px"] { width: 40px !important; height: 40px !important; }
+    [style*="width:52px"][style*="height:52px"], [style*="width: 52px"][style*="height: 52px"] { width: 42px !important; height: 42px !important; }
+    [style*="height:56px"][style*="cursor:default"], [style*="height: 56px"][style*="cursor: default"] { height: 44px !important; }
+    #skills img:not([data-shape]) { width: 34px !important; height: 34px !important; }
+  }
+  @media (min-width: 620px) and (max-width: 860px) {
+    body { font-size: 19px !important; }
+    #top h1 { font-size: clamp(56px, 8.6vw, 82px) !important; }
+    #top > p { font-size: 22px !important; height: 2.6em !important; }
+    section { padding: 72px 36px 80px !important; }
+    #contact > div { padding: 72px 36px 80px !important; }
+    #education, #experience, #skills, #extras, #contact { align-items: center !important; }
+    #contact [style*="grid-template-columns"] { grid-template-columns: 1fr !important; gap: 26px !important; }
+    #contact a[href^="mailto"], #contact [style*="font-weight:600"] { font-size: 19px !important; word-break: break-word !important; }
+    #education > div:last-child, #experience > ul, #skills > ul, #extras > div:last-child { margin-left: auto !important; margin-right: auto !important; }
+    #experience [style*="flex-wrap: wrap"] > span:last-child { font-size: 23px !important; }
+    #experience [style*="padding-left: 62px"] { font-size: 15px !important; }
+    #experience [role="img"], #experience span[style*="width: 50px"] { width: 46px !important; height: 46px !important; -webkit-mask-size: 40px !important; mask-size: 40px !important; }
+    #experience img { width: 34px !important; height: 34px !important; }
+    #experience [role="img"][aria-label="Manulife"] { -webkit-mask-size: 32px !important; mask-size: 32px !important; }
+    [role="img"][aria-label="WAT.ai"] { width: 54px !important; height: 54px !important; }
+    #top [role="img"], #top span[style*="width: 44px"] { width: 42px !important; height: 42px !important; -webkit-mask-size: 36px !important; mask-size: 36px !important; }
+    #top img[src*="shopify"] { width: 32px !important; height: 32px !important; }
+    #top [role="img"][aria-label="University of Waterloo"] { -webkit-mask-size: 28px !important; mask-size: 28px !important; }
+    #top > div:nth-of-type(2) > span { font-size: 22px !important; min-height: 52px !important; }
+    #skills img:not([data-shape]) { width: 44px !important; height: 44px !important; }
+    #education > div:last-child { grid-template-columns: 1fr auto !important; }
+    #education img:not([data-shape]), #education [role="img"][aria-label="University of Waterloo"] { width: 150px !important; height: 150px !important; }
+    #extras > div:last-child { grid-template-columns: repeat(2, 1fr) !important; }
+    [style*="font-size:30px"], [style*="font-size: 30px"] { font-size: 27px !important; }
+    [style*="font-size:26px"], [style*="font-size: 26px"] { font-size: 24px !important; }
+    [style*="font-size:25px"], [style*="font-size: 25px"] { font-size: 24px !important; }
+    [style*="font-size:24px"], [style*="font-size: 24px"] { font-size: 22px !important; }
+    [style*="font-size:23px"], [style*="font-size: 23px"] { font-size: 22px !important; }
+    [style*="font-size:21px"], [style*="font-size: 21px"] { font-size: 20px !important; }
+    [style*="font-size:20px"], [style*="font-size: 20px"] { font-size: 19px !important; }
+    [style*="font-size:19px"], [style*="font-size: 19px"] { font-size: 18px !important; }
+    [style*="font-size:18px"], [style*="font-size: 18px"] { font-size: 17px !important; }
+    [style*="font-size:17px"], [style*="font-size: 17px"] { font-size: 16px !important; }
+    [style*="font-size:16px"], [style*="font-size: 16px"] { font-size: 15px !important; }
+    [style*="font-size:15px"], [style*="font-size: 15px"] { font-size: 14px !important; }
+  }
+</style>
+</helmet>
+
+<div style="width:100%; min-height:100vh; background:transparent; position:relative;">
+
+  <button onClick="{{ nextSection }}" aria-label="Next section" title="Next section" style="position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:30; width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; border:2px solid var(--divider); background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(6px); color:var(--text); cursor:pointer; padding:0;" style-hover="border-color: var(--accent); color: var(--accent)">
+    <span ref="{{ arrowRef }}" style="display:inline-flex; animation:arrow-nudge 1.8s ease-in-out infinite;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M12 4v16"></path><path d="M5 13l7 7 7-7"></path></svg>
+    </span>
+  </button>
+
+  <canvas ref="{{ canvasRef }}" style="position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;"></canvas>
+  <div style="position:relative; z-index:1;">
+
+  <header style="position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--bg) 84%, transparent); backdrop-filter:blur(8px); border-bottom:2px solid var(--divider);">
+    <div style="max-width:1000px; margin:0 auto; padding:14px 40px; display:flex; align-items:center; gap:16px;">
+      <a href="#top" aria-label="Home" id="brandmark" style="flex:none; width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; background:var(--brand-bg); border:2px solid var(--brand-border); overflow:hidden; line-height:1;"><span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:26px; letter-spacing:-0.04em; color:var(--brand-fg); display:block; line-height:1; transform:translateY(0px);">m</span></a>
+      <a href="#top" style="margin-right:16px; font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:23px; letter-spacing:-0.02em; color:var(--text); border-bottom:2px solid var(--accent); padding-bottom:2px;">mahek patel</a>
+      <nav id="navlinks" style="display:flex; gap:22px; font-size:16px; letter-spacing:0; text-transform:lowercase; font-weight:500;">
+        <a href="#education" style="color:var(--muted); border-bottom:2px solid var(--divider); padding-bottom:2px;" style-hover="color:var(--accent); border-color: var(--accent)">education</a>
+        <a href="#experience" style="color:var(--muted); border-bottom:2px solid var(--divider); padding-bottom:2px;" style-hover="color:var(--accent); border-color: var(--accent)">experience</a>
+        <a href="#skills" style="color:var(--muted); border-bottom:2px solid var(--divider); padding-bottom:2px;" style-hover="color:var(--accent); border-color: var(--accent)">skills</a>
+        <a href="#extras" style="color:var(--muted); border-bottom:2px solid var(--divider); padding-bottom:2px;" style-hover="color:var(--accent); border-color: var(--accent)">extras</a>
+        <a href="#contact" style="color:var(--muted); border-bottom:2px solid var(--divider); padding-bottom:2px;" style-hover="color:var(--accent); border-color: var(--accent)">contact</a>
+      </nav>
+      <button id="themetoggle" onClick="{{ toggleTheme }}" style="margin-left:auto; display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border:2px solid var(--divider); background:transparent; color:var(--text); font-family:inherit; font-weight:800; font-size:15px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer;" style-hover="color: var(--accent)">
+        <span style="width:10px; height:10px; background:var(--accent); display:block;"></span>
+        <span>{{ themeLabel }}</span>
+      </button>
+      <button id="navtoggle" onClick="{{ toggleMenu }}" aria-label="Menu" style="flex:none; width:42px; height:42px; align-items:center; justify-content:center; border:2px solid var(--divider); background:transparent; color:var(--text); cursor:pointer; padding:0;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"><path d="M3 6h18"></path><path d="M3 12h18"></path><path d="M3 18h18"></path></svg>
+      </button>
+    </div>
+    <div id="navmenu" ref="{{ menuRef }}" style="flex-direction:column; gap:2px; padding:8px 16px 20px; background:var(--bg); border-top:2px solid var(--divider);">
+      <a href="#top" onClick="{{ closeMenu }}" style="padding:14px 0; font-size:20px; color:var(--text); border-bottom:2px solid var(--divider);">home</a>
+      <a href="#education" onClick="{{ closeMenu }}" style="padding:14px 0; font-size:20px; color:var(--text); border-bottom:2px solid var(--divider);">education</a>
+      <a href="#experience" onClick="{{ closeMenu }}" style="padding:14px 0; font-size:20px; color:var(--text); border-bottom:2px solid var(--divider);">experience</a>
+      <a href="#skills" onClick="{{ closeMenu }}" style="padding:14px 0; font-size:20px; color:var(--text); border-bottom:2px solid var(--divider);">skills</a>
+      <a href="#extras" onClick="{{ closeMenu }}" style="padding:14px 0; font-size:20px; color:var(--text); border-bottom:2px solid var(--divider);">extras</a>
+      <a href="#contact" onClick="{{ closeMenu }}" style="padding:14px 0; font-size:20px; color:var(--text);">contact</a>
+    </div>
+  </header>
+
+  <section id="top" style="position:relative; max-width:1000px; margin:0 auto; padding:40px 12px 40px 96px; min-height:calc(100dvh - 58px); box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; scroll-snap-align:start; scroll-snap-stop:always; ">
+    <img data-shape src="assets/shape-sparkle.png" alt="" aria-hidden="true" data-speed="0.16" data-rot="-14" style="position:absolute; left:calc((1000px - 100vw) / 2 + 14px); top:10%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <img data-shape src="assets/shape-star.png" alt="" aria-hidden="true" data-speed="0.28" data-rot="18" style="position:absolute; right:calc((1000px - 100vw) / 2 + 14px); top:52%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    
+    <div style="display:flex; align-items:flex-end; gap:18px; margin:0 0 26px;">
+      <div style="position:relative; display:inline-block;">
+        <h1 ref="{{ sigRef }}" style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:clamp(58px,10vw,132px); line-height:0.94; letter-spacing:-0.04em; text-transform:lowercase; padding:0 0.04em 0.06em 0; clip-path:inset(0 0 100% 0);">mahek patel <span style="color:var(--accent);">:)</span></h1>
+        <span ref="{{ blockRef }}" style="position:absolute; left:0; right:0; bottom:0; height:0%; background:var(--accent); pointer-events:none;"></span>
+      </div>
+      <button onClick="{{ replaySignature }}" aria-label="Replay signature" title="Replay signature" style="flex:none; margin-bottom:0.22em; width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center; border:2px solid var(--divider); background:transparent; color:var(--muted); cursor:pointer; padding:0;" style-hover="color: var(--accent)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+      </button>
+    </div>
+    <p style="max-width:60ch; min-height:1.5em; font-size:30px; line-height:1.5; margin:0; color:var(--text); font-weight:500;"><span ref="{{ typedRef }}"></span><span style="display:inline-block; width:2px; height:1.05em; background:var(--accent); margin-left:3px; vertical-align:-0.15em; animation:caret 1s steps(1,end) infinite;"></span></p>
+    <div style="display:flex; flex-direction:column; gap:4px; margin-top:26px;">
+      <span style="display:flex; gap:14px; align-items:center; min-height:44px; font-size:24px; line-height:1.2;">
+        <span role="img" aria-label="University of Waterloo" style="width:44px; height:44px; -webkit-mask-size:24px; mask-size:24px; flex:none; background:var(--text); -webkit-mask-image:url(assets/uw-crest.png); mask-image:url(assets/uw-crest.png); -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span>
+        <span style="color:var(--muted);">SciML and Stats @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">University of Waterloo</span></span>
+      </span>
+      <span style="display:flex; gap:14px; align-items:center; min-height:44px; font-size:24px; line-height:1.2;">
+        <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; flex:none;"><img src="https://cdn.simpleicons.org/shopify" alt="Shopify" style="width:33px; height:33px; filter:var(--icon-filter);"></span>
+        <span style="color:var(--muted);">SWE @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">Shopify</span> · Sep 2026</span>
+      </span>
+      <span style="display:flex; gap:14px; align-items:center; min-height:44px; font-size:24px; line-height:1.2;">
+        <span role="img" aria-label="WAT.ai" style="width:50px; height:50px; -webkit-mask-size:40px; mask-size:40px; flex:none; background:var(--text); -webkit-mask-image:url(assets/watai-mark.png); mask-image:url(assets/watai-mark.png); -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span>
+        <span style="color:var(--muted);">ML Engineer @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">WAT.ai</span></span>
+      </span>
+      <span style="display:flex; gap:14px; align-items:center; min-height:44px; font-size:24px; line-height:1.2;">
+        <span role="img" aria-label="Hack the North" style="width:44px; height:44px; -webkit-mask-size:36px; mask-size:36px; flex:none; background:var(--text); -webkit-mask-image:url(assets/htn-mark.png); mask-image:url(assets/htn-mark.png); -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span>
+        <span style="color:var(--muted);">Sponsorship @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">Hack the North</span></span>
+      </span>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:28px;">
+      <a href="mailto:mail@mahekpatel.com" style="display:inline-flex; align-items:center; padding:14px 20px; background:var(--accent); color:var(--on-accent); font-weight:800; font-size:19px; letter-spacing:0.04em; text-transform:uppercase;" style-hover="background: var(--accent-strong)">Email me</a>
+      <a href="https://www.linkedin.com/in/mahekp/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn" style="display:inline-flex; align-items:center; justify-content:center; width:64px; height:64px; border:2px solid var(--divider); color:var(--text);" style-hover="border-color: var(--accent); color: var(--accent)"><span role="img" aria-hidden="true" style="width:48px; height:48px; flex:none; background:currentColor; -webkit-mask-image:url(assets/linkedin-mark.png); mask-image:url(assets/linkedin-mark.png); -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span></a>
+    </div>
+  </section>
+
+  <section id="education" style="position:relative; max-width:1000px; margin:0 auto; padding:40px 40px; min-height:calc(100dvh - 58px); box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; scroll-snap-align:start; scroll-snap-stop:always; ">
+    <img data-shape src="assets/shape-blob.png" alt="" aria-hidden="true" data-speed="0.14" data-rot="-10" style="position:absolute; left:calc((1000px - 100vw) / 2 + 14px); top:54%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <img data-shape src="assets/shape-torus.png" alt="" aria-hidden="true" data-speed="0.22" data-rot="12" style="position:absolute; right:calc((1000px - 100vw) / 2 + 14px); top:12%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <div style="display:grid; grid-template-columns:1fr auto; gap:48px; align-items:center;">
+      <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px;">
+        <li style="display:flex; gap:14px; align-items:baseline; font-size:25px;">
+          <span style="color:var(--accent); font-size:15px; flex:none; transform:translateY(-2px);">◆</span>
+          <span style="font-style:italic;">where i study:</span>
+        </li>
+        <li style="display:flex; flex-direction:column; gap:12px; padding-left:34px;">
+          <span style="display:flex; gap:12px; align-items:baseline; font-size:24px; line-height:1.5; color:var(--muted);">
+            <span style="color:var(--accent); flex:none;">↳</span>
+            <span>Bachelor of Mathematics (Co-op), Applied Mathematics with Scientific Computing &amp; ML, joint Statistics, <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">UWaterloo</span></span>
+          </span>
+          <span style="display:flex; gap:12px; align-items:baseline; font-size:24px; line-height:1.5; color:var(--muted);">
+            <span style="color:var(--accent); flex:none;">↳</span>
+            <span>minors in Computing and Management Studies</span>
+          </span>
+        </li>
+      </ul>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:14px; padding-left:40px; border-left:2px solid var(--divider);">
+        <img src="assets/uw-crest.png" alt="University of Waterloo" style="width:150px; height:150px; object-fit:contain; display:block;">
+        <span style="font-size:15px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-align:center; max-width:12ch; line-height:1.3;">University of Waterloo</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" style="position:relative; max-width:1000px; margin:0 auto; padding:40px 40px; min-height:calc(100dvh - 58px); box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; scroll-snap-align:start; scroll-snap-stop:always; ">
+    <img data-shape src="assets/shape-knot.png" alt="" aria-hidden="true" data-speed="0.2" data-rot="16" style="position:absolute; left:calc((1000px - 100vw) / 2 + 14px); top:14%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <img data-shape src="assets/shape-sparkle.png" alt="" aria-hidden="true" data-speed="0.3" data-rot="-12" style="position:absolute; right:calc((1000px - 100vw) / 2 + 14px); top:56%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:18px;">
+      <li style="display:flex; gap:14px; align-items:baseline; font-size:25px;">
+        <span style="color:var(--accent); font-size:15px; flex:none; transform:translateY(-2px);">◆</span>
+        <span style="font-style:italic;">where i've worked:</span>
+      </li>
+      <li style="display:flex; flex-direction:column; gap:18px; padding-left:34px;">
+        <span style="display:flex; flex-direction:column; gap:6px;">
+          <span style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:24px; color:var(--muted);">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:50px; height:50px; flex:none;"><img src="https://cdn.simpleicons.org/shopify" alt="Shopify" style="width:40px; height:40px; filter:var(--icon-filter);"></span>
+            <span>Software Engineer Intern @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">Shopify</span></span>
+          </span>
+          <span style="font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding-left:62px;">Sep 2026 · Toronto, ON</span>
+        </span>
+        <span style="display:flex; flex-direction:column; gap:6px;">
+          <span style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:24px; color:var(--muted);">
+            <span role="img" aria-label="Manulife" style="width:50px; height:50px; flex:none; background:var(--text); -webkit-mask-image:url(assets/manulife-mark.png); mask-image:url(assets/manulife-mark.png); -webkit-mask-size:30px; mask-size:30px; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span>
+            <span>Cloud Engineer Intern @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">Manulife</span></span>
+          </span>
+          <span style="font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding-left:62px;">May — Aug 2026 · Waterloo, ON</span>
+        </span>
+        <span style="display:flex; flex-direction:column; gap:6px;">
+          <span style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:24px; color:var(--muted);">
+            <span role="img" aria-label="WAT.ai" style="width:58px; height:58px; flex:none; background:var(--text); -webkit-mask-image:url(assets/watai-mark.png); mask-image:url(assets/watai-mark.png); -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span>
+            <span>ML Engineer @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">WAT.ai</span></span>
+          </span>
+          <span style="font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding-left:62px;">May 2026 — present · Waterloo, ON</span>
+        </span>
+        <span style="display:flex; flex-direction:column; gap:6px;">
+          <span style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:24px; color:var(--muted);">
+            <span role="img" aria-label="Sun Life" style="width:50px; height:50px; flex:none; background:var(--logo-strong); -webkit-mask-image:url(assets/sunlife-mark.png); mask-image:url(assets/sunlife-mark.png); -webkit-mask-size:38px; mask-size:38px; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span>
+            <span>Software Engineer Intern @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">Sun Life</span></span>
+          </span>
+          <span style="font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding-left:62px;">Sep 2025 — Apr 2026 · Toronto, ON</span>
+        </span>
+        <span style="display:flex; flex-direction:column; gap:6px;">
+          <span style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:24px; color:var(--muted);">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:50px; height:50px; flex:none;"><img src="assets/ultimatecoders-mark.png" alt="Ultimate Coders" style="width:40px; height:40px; display:block;"></span>
+            <span>Programming Instructor @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">Ultimate Coders</span></span>
+          </span>
+          <span style="font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding-left:62px;">Apr — Aug 2024 · Mississauga, ON</span>
+        </span>
+        <span style="display:flex; flex-direction:column; gap:6px;">
+          <span style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:24px; color:var(--muted);">
+            <span role="img" aria-label="Kumon" style="width:50px; height:50px; flex:none; background:var(--text); -webkit-mask-image:url(assets/kumon-mark.png); mask-image:url(assets/kumon-mark.png); -webkit-mask-size:46px auto; mask-size:46px auto; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span>
+            <span>Teaching Instructor @ <span style="color:var(--text); font-weight:600; border-bottom:2px solid var(--accent);">Kumon</span></span>
+          </span>
+          <span style="font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding-left:62px;">Sep 2022 — Feb 2023 · Milton, ON</span>
+        </span>
+      </li>
+    </ul>
+  </section>
+
+  <section id="skills" style="position:relative; max-width:1000px; margin:0 auto; padding:40px 40px; min-height:calc(100dvh - 58px); box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; scroll-snap-align:start; scroll-snap-stop:always; ">
+    <img data-shape src="assets/shape-star.png" alt="" aria-hidden="true" data-speed="0.15" data-rot="10" style="position:absolute; left:calc((1000px - 100vw) / 2 + 14px); top:54%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <img data-shape src="assets/shape-arc.png" alt="" aria-hidden="true" data-speed="0.25" data-rot="-16" style="position:absolute; right:calc((1000px - 100vw) / 2 + 14px); top:11%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px;">
+      <li style="display:flex; gap:14px; align-items:baseline; font-size:25px; flex-wrap:wrap;">
+        <span style="color:var(--accent); font-size:15px; flex:none; transform:translateY(-2px);">◆</span>
+        <span style="font-style:italic;">what i work with:</span>
+      </li>
+      <li style="display:flex; flex-direction:column; gap:24px; padding-left:34px;">
+
+        <span style="display:flex; flex-direction:column; gap:12px;">
+          <span style="display:flex; gap:12px; align-items:baseline; font-size:23px; color:var(--muted);">
+            <span style="color:var(--accent); flex:none;">↳</span>
+            <span style="color:var(--text); font-weight:600;">languages</span>
+            <span style="color:var(--accent); font-weight:600;">{{ labelLanguages }}</span>
+          </span>
+          <span style="display:flex; flex-wrap:wrap; gap:22px; padding-left:26px; align-items:center;">
+            <span data-name="Python" data-cat="languages" title="Python" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/python" alt="Python" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="SQL" data-cat="languages" title="SQL" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/mysql" alt="SQL" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="C" data-cat="languages" title="C" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/c" alt="C" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="C++" data-cat="languages" title="C++" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/cplusplus" alt="C++" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="C#" data-cat="languages" title="C#" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://api.iconify.design/simple-icons:csharp.svg" alt="C#" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="Bash" data-cat="languages" title="Bash" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/gnubash" alt="Bash" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="JavaScript" data-cat="languages" title="JavaScript" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/javascript" alt="JavaScript" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="TypeScript" data-cat="languages" title="TypeScript" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/typescript" alt="TypeScript" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="Racket" data-cat="languages" title="Racket" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/racket" alt="Racket" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+          </span>
+        </span>
+
+        <span style="display:flex; flex-direction:column; gap:12px;">
+          <span style="display:flex; gap:12px; align-items:baseline; font-size:23px; color:var(--muted);">
+            <span style="color:var(--accent); flex:none;">↳</span>
+            <span style="color:var(--text); font-weight:600;">cloud &amp; infrastructure</span>
+            <span style="color:var(--accent); font-weight:600;">{{ labelCloud }}</span>
+          </span>
+          <span style="display:flex; flex-wrap:wrap; gap:22px; padding-left:26px; align-items:center;">
+            <span data-name="AWS" data-cat="cloud" title="AWS" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://api.iconify.design/logos:aws.svg" alt="AWS" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="Azure" data-cat="cloud" title="Azure" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://api.iconify.design/logos:microsoft-azure.svg" alt="Azure" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="Docker" data-cat="cloud" title="Docker" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/docker" alt="Docker" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="Kubernetes" data-cat="cloud" title="Kubernetes" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/kubernetes" alt="Kubernetes" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="Linux" data-cat="cloud" title="Linux" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/linux" alt="Linux" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="GitHub Actions" data-cat="cloud" title="GitHub Actions" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/githubactions" alt="GitHub Actions" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="Git" data-cat="cloud" title="Git" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/git" alt="Git" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            
+            </span>
+        </span>
+
+        <span style="display:flex; flex-direction:column; gap:12px;">
+          <span style="display:flex; gap:12px; align-items:baseline; font-size:23px; color:var(--muted);">
+            <span style="color:var(--accent); flex:none;">↳</span>
+            <span style="color:var(--text); font-weight:600;">data, ml &amp; web</span>
+            <span style="color:var(--accent); font-weight:600;">{{ labelData }}</span>
+          </span>
+          <span style="display:flex; flex-wrap:wrap; gap:22px; padding-left:26px; align-items:center;">
+            <span data-name="Pandas" data-cat="data" title="Pandas" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/pandas" alt="Pandas" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="Matplotlib" data-cat="data" title="Matplotlib" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="height:56px; display:inline-flex; align-items:center; justify-content:center; cursor:default; font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:19px; letter-spacing:-0.01em; color:var(--text);" style-hover="color: var(--accent)">PLT</span>
+            <span data-name="MongoDB" data-cat="data" title="MongoDB" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/mongodb" alt="MongoDB" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="React" data-cat="data" title="React" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/react" alt="React" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="HTML" data-cat="data" title="HTML" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/html5" alt="HTML" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+            <span data-name="CSS" data-cat="data" title="CSS" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="width:58px; height:58px; display:inline-flex; align-items:center; justify-content:center; cursor:default; opacity:0.9;" style-hover="opacity:1"><img src="https://cdn.simpleicons.org/css" alt="CSS" style="width:44px; height:44px; filter:var(--icon-filter);"></span>
+          </span>
+        </span>
+
+        <span style="display:flex; flex-direction:column; gap:12px;">
+          <span style="display:flex; gap:12px; align-items:baseline; font-size:23px; color:var(--muted);">
+            <span style="color:var(--accent); flex:none;">↳</span>
+            <span style="color:var(--text); font-weight:600;">foundations</span>
+            <span style="color:var(--accent); font-weight:600;">{{ labelFoundations }}</span>
+          </span>
+          <span style="display:flex; flex-wrap:wrap; gap:22px; padding-left:26px; align-items:center;">
+            <span data-name="Data structures &amp; algorithms" data-cat="foundations" title="Data structures &amp; algorithms" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="height:56px; display:inline-flex; align-items:center; justify-content:center; cursor:default; font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:26px; letter-spacing:-0.02em; color:var(--text);" style-hover="color: var(--accent)">DSA</span>
+            <span data-name="Object-oriented programming" data-cat="foundations" title="Object-oriented programming" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="height:56px; display:inline-flex; align-items:center; justify-content:center; cursor:default; font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:26px; letter-spacing:-0.02em; color:var(--text);" style-hover="color: var(--accent)">OOP</span>
+            <span data-name="Applied statistics" data-cat="foundations" title="Applied statistics" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="height:56px; display:inline-flex; align-items:center; justify-content:center; cursor:default; font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:26px; letter-spacing:-0.02em; color:var(--text);" style-hover="color: var(--accent)">STATS</span>
+            <span data-name="Reinforcement learning" data-cat="foundations" title="Reinforcement learning" onMouseEnter="{{ hoverTech }}" onMouseLeave="{{ clearTech }}" style="height:56px; display:inline-flex; align-items:center; justify-content:center; cursor:default; font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:26px; letter-spacing:-0.02em; color:var(--text);" style-hover="color: var(--accent)">RL</span>
+          </span>
+        </span>
+
+      </li>
+    </ul>
+  </section>
+
+  <section id="extras" style="position:relative; max-width:1000px; margin:0 auto; padding:40px 40px; min-height:calc(100dvh - 58px); box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; scroll-snap-align:start; scroll-snap-stop:always; ">
+    <img data-shape src="assets/shape-blob.png" alt="" aria-hidden="true" data-speed="0.18" data-rot="14" style="position:absolute; left:calc((1000px - 100vw) / 2 + 14px); top:10%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <img data-shape src="assets/shape-torus.png" alt="" aria-hidden="true" data-speed="0.26" data-rot="-14" style="position:absolute; right:calc((1000px - 100vw) / 2 + 14px); top:54%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <div style="display:flex; gap:14px; align-items:baseline; font-size:25px; margin-bottom:22px; align-self:stretch;">
+      <span style="color:var(--accent); font-size:15px; flex:none; transform:translateY(-2px);">◆</span>
+      <span style="font-style:italic;">outside of class:</span>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--divider); margin-left:34px; clip-path:inset(0 2px 0 0); align-self:stretch;">
+      <div style="grid-column:1 / -1; background:var(--bg); padding:16px 18px 18px; display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 18px;">
+        <span role="img" aria-label="WAT.ai" style="width:58px; height:58px; flex:none; background:var(--text); -webkit-mask-image:url(assets/watai-mark.png); mask-image:url(assets/watai-mark.png); -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:block;"></span>
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:26px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">WAT.ai</span>
+        <span style="font-size:18px; font-weight:600; color:var(--accent);">Machine Learning Engineer</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">May 2026 — present</span>
+        <span style="flex:1 1 100%; font-size:17px; line-height:1.5; color:var(--muted); text-wrap:pretty;">Model scaffolding for SportsNext — RL and JEPA world models for soccer action prediction, plus ingestion pipelines and evaluation benchmarks.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">Hack the North</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Sponsorship Coordinator</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Feb 2026 — present</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Raised $XXX,XXX for Canada’s largest hackathon.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">UW Women in Math</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Directed Reading Program Mentee</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Dec 2025 — Apr 2026</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Directed reading on Markov chains and random walks, applied to card shuffling.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">Hack the 6ix</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Organizer, Business Development</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Oct 2025 — Jul 2026</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Partnerships for Toronto’s largest summer hackathon.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">UW Computer Science Club</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Web Designer</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Sep 2025 — May 2026</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Designing CSC site pages and the class profiles.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">UW Data Science Club</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Outreach Coordinator</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Sep 2025 — Apr 2026</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Outreach for club funding and CxC hackathon sponsors.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">CUCAI</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Organizer</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Jun 2025 — Mar 2026</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Canadian Undergraduate Conference on AI — 500+ students, past speakers include Geoffrey Hinton.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">UW Tech+</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Fullstack Tech Lead</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">May 2025 — Apr 2026</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Leading 4–6 devs on the student mentorship portal.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">UW MathSoc</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Director of Marketing</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Jan 2025 — Apr 2025</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Marketing campaigns reaching 5000+ impressions.</span>
+      </div>
+      <div style="background:var(--bg); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px;">
+        <span style="font-family:'Figtree', system-ui, sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.03em; color:var(--text); line-height:1.15;">Relay For Life Canada</span>
+        <span style="font-size:16px; font-weight:600; color:var(--accent);">Event Organizer &amp; Coordinator</span>
+        <span style="font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Jan 2024 — Jun 2024</span>
+        <span style="font-size:15px; line-height:1.45; color:var(--muted); margin-top:4px; text-wrap:pretty;">Student fundraiser of 1000+ participants, $35,000+ raised.</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="position:relative; background:var(--accent); color:var(--on-accent); border-top:2px solid var(--divider); min-height:calc(100dvh - 58px); box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; scroll-snap-align:start; scroll-snap-stop:always; ">
+    <img data-shape src="assets/shape-knot.png" alt="" aria-hidden="true" data-speed="0.16" data-rot="12" style="position:absolute; left:14px; top:52%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <img data-shape src="assets/shape-star.png" alt="" aria-hidden="true" data-speed="0.24" data-rot="-12" style="position:absolute; right:14px; top:10%; width:max(0px, min(300px, calc((100vw - 1000px) / 2 + 4px))); pointer-events:none; user-select:none; opacity:0; z-index:0; will-change:transform, opacity;">
+    <div style="max-width:1000px; width:100%; margin:0 auto; padding:40px;">
+      <h2 style="font-size:clamp(36px,5.5vw,64px); max-width:24ch; margin:0 0 28px;">Let's talk — I'm open to internships and side projects.</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:24px; padding-top:28px; border-top:2px solid var(--on-accent);">
+        <div>
+          <p style="margin:0 0 6px; font-size:15px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; opacity:0.75;">Email</p>
+          <a href="mailto:mail@mahekpatel.com" style="font-size:24px; font-weight:600; color:var(--on-accent); border-bottom:2px solid var(--on-accent);">mail@mahekpatel.com</a>
+        </div>
+        <div>
+          <p style="margin:0 0 6px; font-size:15px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; opacity:0.75;">Phone</p>
+          <p style="margin:0; font-size:24px; font-weight:600;">(647) 450-8438</p>
+        </div>
+        <div>
+          <p style="margin:0 0 6px; font-size:15px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; opacity:0.75;">Elsewhere</p>
+          <p style="margin:0; font-size:24px; font-weight:600; display:flex; gap:14px;">
+            <a href="https://www.linkedin.com/mahekp" style="color:var(--on-accent); border-bottom:2px solid var(--on-accent);">LinkedIn</a>
+          </p>
+        </div>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; margin-top:40px; padding-top:20px; border-top:2px solid var(--on-accent); font-size:18px; letter-spacing:0.04em; opacity:0.8;">
+        <span>Mahek Patel · Waterloo, ON</span>
+        <span>Updated 2026</span>
+      </div>
+    </div>
+  </section>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'light' | 'dark'&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;&quot;,&quot;options&quot;:[&quot;#ec3013&quot;,&quot;#201e1d&quot;,&quot;#1f5c4d&quot;,&quot;#2b46c8&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { theme: "dark", hovered: "", hoveredCat: "", typed: "" };
+  canvasRef = React.createRef();
+  sigRef = React.createRef();
+  blockRef = React.createRef();
+
+  phrases = [
+    "SciML + Stats @ UW",
+    "a builder with a creative side",
+    "SWE @ Shopify",
+    "teaching models to read soccer games",
+    "raises real money for hackathons"
+  ];
+
+  typedRef = React.createRef();
+
+  startTyping() {
+    if (this._typeTimer) clearTimeout(this._typeTimer);
+    let p = 0, i = 0, deleting = false;
+    const tick = () => {
+      const full = this.phrases[p];
+      i += deleting ? -1 : 1;
+      if (this.typedRef.current) this.typedRef.current.textContent = full.slice(0, i);
+      let wait = deleting ? 34 : 62;
+      if (!deleting && i === full.length) { deleting = true; wait = 1700; }
+      else if (deleting && i === 0) { deleting = false; p = (p + 1) % this.phrases.length; wait = 320; }
+      this._typeTimer = setTimeout(tick, wait);
+    };
+    this._typeTimer = setTimeout(tick, 900);
+  }
+
+  arrowRef = React.createRef();
+  menuRef = React.createRef();
+
+  toggleMenu = () => {
+    const el = this.menuRef.current;
+    if (!el) return;
+    el.style.display = el.style.display === "flex" ? "none" : "flex";
+  };
+
+  closeMenu = () => {
+    const el = this.menuRef.current;
+    if (el) el.style.display = "none";
+  };
+
+  startReveals() {
+    const targets = [];
+    for (const id of this.sectionIds) {
+      const sec = document.getElementById(id);
+      if (!sec) continue;
+      for (const child of sec.children) {
+        if (child.hasAttribute("data-shape")) continue;
+        targets.push(child);
+      }
+    }
+    targets.forEach((el, i) => {
+      el.style.opacity = "0";
+      el.style.transform = "translate3d(-26px, -22px, 0)";
+      el.style.transition = "opacity 720ms cubic-bezier(.22,.61,.36,1) " + (i % 4) * 70 + "ms, transform 820ms cubic-bezier(.22,.61,.36,1) " + (i % 4) * 70 + "ms";
+    });
+    const step = () => {
+      const vh = window.innerHeight;
+      for (const el of targets) {
+        const r = el.getBoundingClientRect();
+        const visible = r.top < vh - 60 && r.bottom > 40;
+        el.style.opacity = visible ? "1" : "0";
+        el.style.transform = visible ? "translate3d(0,0,0)" : "translate3d(-26px, -22px, 0)";
+      }
+      this._revealRaf = requestAnimationFrame(step);
+    };
+    this._revealRaf = requestAnimationFrame(step);
+  }
+
+  startShapes() {
+    const state = new Map();
+    const collect = () => Array.from(document.querySelectorAll("[data-shape]"));
+    const tick = () => {
+      const vh = window.innerHeight;
+      for (const el of collect()) {
+        let s = state.get(el);
+        if (!s) { s = { y: 90, o: 0, r: 0 }; state.set(el, s); }
+        const rect = el.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const visible = center > -rect.height && center < vh + rect.height;
+        const speed = parseFloat(el.dataset.speed || "0.2");
+        const rot = parseFloat(el.dataset.rot || "12");
+        // target offset trails the scroll position — the further from centre, the further behind
+        const off = (center - vh / 2) / vh;
+        const targetY = visible ? off * speed * vh * -1 : 90;
+        const targetO = visible ? 1 : 0;
+        const targetR = off * rot;
+        // heavy lerp = the lag
+        s.y += (targetY - s.y) * 0.055;
+        s.o += (targetO - s.o) * 0.07;
+        s.r += (targetR - s.r) * 0.04;
+        el.style.transform = "translate3d(0," + s.y.toFixed(2) + "px,0) rotate(" + s.r.toFixed(2) + "deg)";
+        el.style.opacity = s.o.toFixed(3);
+      }
+      const arrow = this.arrowRef.current;
+      const svg = arrow && arrow.querySelector("svg");
+      if (svg) {
+        const mid = window.innerHeight * 0.5;
+        let active = this.sectionIds[0];
+        for (const id of this.sectionIds) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top <= mid) active = id;
+        }
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const atEnd = active === "contact" || window.scrollY >= maxScroll - 4;
+        svg.style.transition = "transform 260ms ease";
+        svg.style.transform = atEnd ? "rotate(180deg)" : "rotate(0deg)";
+      }
+      this._shapeRaf = requestAnimationFrame(tick);
+    };
+    this._shapeRaf = requestAnimationFrame(tick);
+  }
+  sectionIds = ["top", "education", "experience", "skills", "extras", "contact"];
+
+  nextSection = () => {
+    const els = this.sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const y = window.scrollY + 80;
+    let target = els.find(el => el.offsetTop > y);
+    let dest = target ? Math.max(target.offsetTop - 58, 0) : 0;
+    // a next stop past the scroll limit still means "go down" — land at the bottom
+    if (target && dest > maxScroll) dest = maxScroll;
+    // only wrap to the top once there is nowhere further to go
+    if (!target || window.scrollY >= maxScroll - 4) dest = 0;
+    window.scrollTo({ top: dest, behavior: "smooth" });
+  };
+
+  hoverTech = (e) => this.setState({ hovered: e.currentTarget.dataset.name });
+  clearTech = () => this.setState({ hovered: "" });
+
+  playSignature = () => {
+    const sig = this.sigRef.current, block = this.blockRef.current;
+    if (!sig) return;
+    const dur = "1.7s", ease = "cubic-bezier(.7,0,.25,1)";
+    sig.style.animation = "none";
+    if (block) block.style.animation = "none";
+    void sig.offsetWidth;
+    sig.style.animation = "sig-reveal " + dur + " " + ease + " forwards";
+    if (block) block.style.animation = "sig-block " + dur + " " + ease + " forwards";
+  };
+
+  startWaves() {
+    const canvas = this.canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const spacing = 26;
+    let w = 0, h = 0, dpr = 1;
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    this._onResize = resize;
+    window.addEventListener("resize", resize);
+
+    const draw = (ts) => {
+      const t = ts / 1000;
+      const dark = document.body.dataset.theme === "dark";
+      const base = dark ? "243,242,242" : "32,30,29";
+      ctx.clearRect(0, 0, w, h);
+      const cols = Math.ceil(w / spacing) + 1;
+      const rows = Math.ceil(h / spacing) + 1;
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = i * spacing, y = j * spacing;
+          const d = Math.sqrt((x - w * 0.15) ** 2 + (y - h * 0.1) ** 2);
+          const ripple = Math.sin(d / 62 - t * 1.1);
+          const fabric = Math.sin(x / 150 + t * 0.5) * Math.cos(y / 190 - t * 0.35);
+          const v = ripple * 0.6 + fabric * 0.4;
+          const r = 0.7 + (v + 1) * 1.05;
+          const a = (0.05 + (v + 1) * 0.11) * (dark ? 0.85 : 0.7);
+          ctx.beginPath();
+          ctx.arc(x, y + v * 4, r, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(" + base + "," + a.toFixed(3) + ")";
+          ctx.fill();
+        }
+      }
+      this._raf = requestAnimationFrame(draw);
+    };
+    this._raf = requestAnimationFrame(draw);
+  }
+
+  componentWillUnmount() {
+    if (this._typeTimer) clearTimeout(this._typeTimer);
+    if (this._revealRaf) cancelAnimationFrame(this._revealRaf);
+    if (this._shapeRaf) cancelAnimationFrame(this._shapeRaf);
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._onResize) window.removeEventListener("resize", this._onResize);
+  }
+
+  componentDidMount() {
+    this.startWaves();
+    this.startTyping();
+    this.startShapes();
+    this.startReveals();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(this.playSignature);
+    else setTimeout(this.playSignature, 200);
+    let saved = null;
+    try { saved = localStorage.getItem("mp-portfolio-theme"); } catch (e) {}
+    const initial = saved || this.props.defaultTheme || "dark";
+    this.setState({ theme: initial });
+    this.applyTheme(initial);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.accent !== this.props.accent) this.applyTheme(this.state.theme);
+  }
+
+  applyTheme(theme) {
+    document.body.dataset.theme = theme;
+    const accent = this.props.accent;
+    if (accent) {
+      document.body.style.setProperty("--accent", accent);
+      document.body.style.setProperty("--accent-strong", accent);
+    }
+  }
+
+  renderVals() {
+    const theme = this.state.theme;
+    return {
+      canvasRef: this.canvasRef,
+      sigRef: this.sigRef,
+      blockRef: this.blockRef,
+      typedRef: this.typedRef,
+      arrowRef: this.arrowRef,
+      menuRef: this.menuRef,
+      toggleMenu: this.toggleMenu,
+      closeMenu: this.closeMenu,
+      nextSection: this.nextSection,
+      hoverTech: this.hoverTech,
+      clearTech: this.clearTech,
+      labelLanguages: this.state.hoveredCat === "languages" ? "— " + this.state.hovered : "",
+      labelCloud: this.state.hoveredCat === "cloud" ? "— " + this.state.hovered : "",
+      labelData: this.state.hoveredCat === "data" ? "— " + this.state.hovered : "",
+      labelFoundations: this.state.hoveredCat === "foundations" ? "— " + this.state.hovered : "",
+      replaySignature: this.playSignature,
+      themeLabel: theme === "dark" ? "Light" : "Dark",
+      toggleTheme: () => {
+        const next = theme === "dark" ? "light" : "dark";
+        this.setState({ theme: next });
+        this.applyTheme(next);
+        try { localStorage.setItem("mp-portfolio-theme", next); } catch (e) {}
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
